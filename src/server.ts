@@ -1,3 +1,14 @@
-import fs from 'fs';
+import { askForMainPassword } from './utils/questions';
+import { isMainPasswordValid } from './utils/validation';
 
-console.log(fs.readFileSync('./README.md', 'utf-8'));
+// function start()
+const start = async () => {
+  let mainPassword = await askForMainPassword();
+  while (!isMainPasswordValid(mainPassword)) {
+    console.log('Is invalid');
+    mainPassword = await askForMainPassword();
+  }
+  console.log('is valid');
+};
+
+start();
