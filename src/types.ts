@@ -6,7 +6,7 @@ export type NewUserAndPw = {
   password: string;
 };
 
-export type Credential = {
+export type CredentialType = {
   service: string;
   username: string;
   password: string;

@@ -5,8 +5,11 @@ import {
   chooseService,
   askForCredential,
 } from './utils/questions';
-import { isMainPasswordValid } from './utils/validation';
-import { readCredentials } from './utils/credentials';
+import {
+  isMainPasswordValid,
+  isServiceCredentialInDB,
+} from './utils/validation';
+import { readCredentials, saveCredentials } from './utils/credentials';
 
 //function start() {
 const start = async () => {
@@ -37,7 +40,14 @@ const start = async () => {
     case 'add':
       {
         const newCredential = await askForCredential();
-        console.log(newCredential);
+        const existsInDb = await isServiceCredentialInDB(newCredential);
+        if (existsInDb) {
+          console.log('Credential already exists.');
+        }
+        await saveCredentials(newCredential);
+        console.log(
+          `Service: ${newCredential.service} with Username: ${newCredential.username} is saved in database`
+        );
       }
       break;
   }
