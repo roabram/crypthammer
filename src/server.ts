@@ -3,13 +3,14 @@ import {
   askForMainPassword,
   askForCommand,
   chooseService,
-  addNewService,
-  addNewUserAndPassword,
+  askForCredential,
 } from './utils/questions';
 import {
   isMainPasswordValid,
-  doesCredentialServiceExist,
+  isServiceCredentialInDB,
 } from './utils/validation';
+import { readCredentials, saveCredentials } from './utils/credentials';
+
 //function start() {
 const start = async () => {
   const mainPassword = await askForMainPassword();
@@ -24,23 +25,29 @@ const start = async () => {
   switch (command) {
     case 'list':
       {
-        const service = await chooseService();
+        const credentials = await readCredentials();
+        const credentialServices = credentials.map(
+          (credential) => credential.service
+        );
+        const service = await chooseService(credentialServices);
+        const selectedService = credentials.find(
+          (credential) => credential.service === service
+        );
+        console.log(selectedService);
         printPassword(service);
       }
       break;
     case 'add':
       {
-        const startAddCase = async () => {
-          const newService = await addNewService();
-          if (!doesCredentialServiceExist(newService)) {
-            await addNewUserAndPassword();
-            console.log('Your new service has been saved');
-          } else {
-            console.log('Service already exists');
-            startAddCase();
-          }
-        };
-        startAddCase();
+        const newCredential = await askForCredential();
+        const existsInDb = await isServiceCredentialInDB(newCredential);
+        if (existsInDb) {
+          console.log('Credential already exists.');
+        }
+        await saveCredentials(newCredential);
+        console.log(
+          `Service: ${newCredential.service} with Username: ${newCredential.username} is saved in database`
+        );
       }
       break;
   }

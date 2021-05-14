@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { Command, NewUserAndPw } from '../types';
+import { Command, CredentialType } from '../types';
 //export function askForMainPassword(): Promise<string> {
 export const askForMainPassword = (): Promise<string> => {
   return inquirer
@@ -27,45 +27,30 @@ export const askForCommand = async (): Promise<Command> => {
   ]);
   return answers.command;
 };
-export const chooseService = async (): Promise<string> => {
-  const answers = await inquirer.prompt<{ service: string }>([
-    {
-      type: 'list',
-      name: 'Service',
-      message: 'Choose a service',
-      choices: [
-        { name: 'Google', value: 'Google', short: 'pw1' },
-        { name: 'Github', value: 'Github', short: 'pw2' },
-        { name: 'Codewars', value: 'Codewars', short: 'pw3' },
-      ],
-    },
-  ]);
+export const chooseService = async (services: string[]): Promise<string> => {
+  const answers = await inquirer.prompt<{ service: string }>({
+    type: 'list',
+    name: 'service',
+    message: 'Please choose a service',
+    choices: services,
+  });
+
   return answers.service;
 };
-export const addNewService = async (): Promise<string> => {
-  const inputService = await inquirer.prompt<{ service: string }>([
+
+export const askForCredential = async (): Promise<CredentialType> => {
+  const answers = await inquirer.prompt<CredentialType>([
     {
       type: 'input',
       name: 'service',
-      message: "What's the service?",
+      message: 'Please enter service name',
     },
-  ]);
-  return inputService.service;
-};
-
-export const addNewUserAndPassword = async (): Promise<NewUserAndPw> => {
-  const answers = await inquirer.prompt<NewUserAndPw>([
     {
       type: 'input',
       name: 'username',
-      message: 'What your username?',
+      message: 'Please enter username',
     },
-    {
-      type: 'password',
-      name: 'password',
-      message: "What's your password?",
-      mask: '*',
-    },
+    { type: 'password', name: 'password', message: 'Please enter password' },
   ]);
   return answers;
 };

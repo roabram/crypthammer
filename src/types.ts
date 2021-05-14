@@ -5,3 +5,9 @@ export type NewUserAndPw = {
   username: string;
   password: string;
 };
+
+export type CredentialType = {
+  service: string;
+  username: string;
+  password: string;
+};
