@@ -1,4 +1,4 @@
-import { printPassword } from './utils/messages';
+// import { printPassword } from './utils/messages';
 import {
   askForMainPassword,
   askForCommand,
@@ -10,6 +10,7 @@ import {
   isServiceCredentialInDB,
 } from './utils/validation';
 import { readCredentials, saveCredentials } from './utils/credentials';
+import CryptoJS from 'crypto-js';
 
 //function start() {
 const start = async () => {
@@ -29,12 +30,20 @@ const start = async () => {
         const credentialServices = credentials.map(
           (credential) => credential.service
         );
+
         const service = await chooseService(credentialServices);
         const selectedService = credentials.find(
           (credential) => credential.service === service
         );
-        console.log(selectedService);
-        printPassword(service);
+        if (selectedService) {
+          const decryptedPassword = CryptoJS.AES.decrypt(
+            selectedService.password,
+            'secret123'
+          );
+          console.log(decryptedPassword.toString(CryptoJS.enc.Utf8));
+        }
+
+        // printPassword(service);
       }
       break;
     case 'add':
@@ -43,6 +52,7 @@ const start = async () => {
         const existsInDb = await isServiceCredentialInDB(newCredential);
         if (existsInDb) {
           console.log('Credential already exists.');
+          break;
         }
         await saveCredentials(newCredential);
         console.log(
