@@ -11,14 +11,17 @@ import {
 } from './utils/validation';
 import { readCredentials, saveCredentials } from './utils/credentials';
 import CryptoJS from 'crypto-js';
+import { connectDatabase } from './utils/database';
 
 dotenv.config();
 //function start() {
-console.log(process.env.MONGO_URL);
-// const databaseURI = 'process.env.MONGO_URL';
 
 const start = async () => {
-  // await connectDatabase();
+  if (process.env.MONGO_URL === undefined) {
+    throw new Error('Missing env MONGO_URL');
+  }
+
+  await connectDatabase(process.env.MONGO_URL);
 
   const mainPassword = await askForMainPassword();
   if (!(await isMainPasswordValid(mainPassword))) {
