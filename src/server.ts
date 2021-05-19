@@ -1,4 +1,4 @@
-// import { printPassword } from './utils/messages';
+import dotenv from 'dotenv';
 import {
   askForMainPassword,
   askForCommand,
@@ -9,11 +9,24 @@ import {
   isMainPasswordValid,
   isServiceCredentialInDB,
 } from './utils/validation';
-import { readCredentials, saveCredentials } from './utils/credentials';
+import {
+  deleteCredential,
+  readCredentials,
+  saveCredentials,
+} from './utils/credentials';
 import CryptoJS from 'crypto-js';
+import { connectDatabase, disconnectDatabase } from './utils/database';
 
+dotenv.config();
 //function start() {
+
 const start = async () => {
+  if (process.env.MONGO_URL === undefined) {
+    throw new Error('Missing env MONGO_URL');
+  }
+
+  await connectDatabase(process.env.MONGO_URL);
+
   const mainPassword = await askForMainPassword();
   if (!(await isMainPasswordValid(mainPassword))) {
     console.log('Is invalid');
@@ -60,6 +73,21 @@ const start = async () => {
         );
       }
       break;
+    case 'delete': {
+      const credentials = await readCredentials();
+      const credentialServices = credentials.map(
+        (credential) => credential.service
+      );
+      const service = await chooseService(credentialServices);
+      const selectedService = credentials.find(
+        (credential) => credential.service === service
+      );
+      if (selectedService) {
+        await deleteCredential(selectedService);
+        console.log('We have....DELETED');
+      }
+    }
   }
+  disconnectDatabase();
 };
 start();

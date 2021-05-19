@@ -1,4 +1,4 @@
-export type Command = 'list' | 'add';
+export type Command = 'list' | 'add' | 'delete';
 // export type Credential = 'netflix' | 'google' | 'web';
 
 export type NewUserAndPw = {
