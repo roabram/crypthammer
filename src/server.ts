@@ -7,6 +7,7 @@ import {
   deleteCredential,
   readCredentials,
   saveCredentials,
+  readCredential,
 } from './utils/credentials';
 
 if (process.env.MONGO_URL === undefined) {
@@ -14,7 +15,7 @@ if (process.env.MONGO_URL === undefined) {
 }
 
 const app = express();
-const port = 3333;
+const port = 5000;
 
 app.use(express.json());
 
@@ -27,6 +28,11 @@ app.post('/api/credentials', async (request, response) => {
   // response.send('Add new credential');
   await saveCredentials(request.body);
   response.json(request.body);
+});
+
+app.get('/api/credentials/:service', async (request, response) => {
+  const credential = await readCredential(request.params.service);
+  response.json(credential);
 });
 
 app.delete('/api/credentials/:service', async (request, response) => {

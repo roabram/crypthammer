@@ -83,7 +83,7 @@ const start = async () => {
         (credential) => credential.service === service
       );
       if (selectedService) {
-        await deleteCredential(selectedService);
+        await deleteCredential(selectedService.service);
         console.log('We have....DELETED');
       }
     }
