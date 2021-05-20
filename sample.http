@@ -8,10 +8,13 @@ Content-Type: application/json
 
 ### Add a new credential
 POST http://localhost:3333/api/credentials HTTP/1.1
-Content-Type: application/json
+Accept: application/json
 
 {
   "service": "MyService",
   "username": "BobBoson",
   "password": "supersecret9000"
 }
+
+### Delete a credential
+DELETE http://localhost:3333/api/credentials/MyService/ HTTP/1.1
