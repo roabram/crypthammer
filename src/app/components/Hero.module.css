@@ -6,14 +6,9 @@
 
 .hero img {
   display: flex;
-
-  /* width: 100%; */
-  margin: 0;
+  margin-top: 0;
   padding: 0;
-  height: 100%;
-
-  /* width: 100vh; */
-  position: absolut;
+  height: 30em;
   transform: rotate(90deg);
 }
 
