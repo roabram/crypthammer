@@ -1,0 +1,24 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+.hero img {
+  display: flex;
+
+  /* width: 100%; */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+
+  /* width: 100vh; */
+  position: absolut;
+  transform: rotate(90deg);
+}
+
+.hero {
+  display: grid;
+  background: #d5cacd;
+  color: black;
+}
